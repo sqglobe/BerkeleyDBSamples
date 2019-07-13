@@ -1,0 +1,3 @@
+[submodule "submodules/cmake/FindBerkeleyDB"]
+	path = submodules/cmake/FindBerkeleyDB
+	url = https://gitlab.com/sum01/FindBerkeleyDB.git

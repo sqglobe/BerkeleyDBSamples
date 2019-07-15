@@ -9,8 +9,6 @@
 #include <algorithm>
 #include <iterator>
 
-const std::string env_dir("sample-map-usage-dir");
-
 namespace fs = std::experimental::filesystem;
 
 void* save_str(const std::string& str, void* dest)
@@ -63,15 +61,15 @@ class TestMarshaller {
 
 int main()
 {
-    if(!fs::exists(env_dir) && !fs::create_directory(env_dir)){
-       std::cerr << "Failed to create env directory: " << env_dir << std::endl;
+    if(!fs::exists(ENV_FOLDER) && !fs::create_directory(ENV_FOLDER)){
+       std::cerr << "Failed to create env directory: " << ENV_FOLDER << std::endl;
        return 1;
     }
 
     dbstl::dbstl_startup();
 
     // open an environment and the database
-    auto penv = dbstl::open_env(env_dir.c_str(), 0u, DB_INIT_MPOOL | DB_CREATE);
+    auto penv = dbstl::open_env(ENV_FOLDER, 0u, DB_INIT_MPOOL | DB_CREATE);
     auto db = dbstl::open_db(penv, "sample-map-usage.db", DB_BTREE, DB_CREATE, 0u);
 
     //cleare current database data

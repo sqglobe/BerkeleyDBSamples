@@ -99,7 +99,7 @@ int main()
 
         // copy the values into storage
 
-        std::copy(std::cbegin(inputValues), std::cend(inputValues), std::inserter(elementsMap, elementsMap.begin(dbstl::ReadModifyWriteOption::read_modify_write())));
+        std::copy(std::cbegin(inputValues), std::cend(inputValues), std::inserter(elementsMap, elementsMap.begin()));
     }
 
     std::cout << "Filled persistant storage" << std::endl;

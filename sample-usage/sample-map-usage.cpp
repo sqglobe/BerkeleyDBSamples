@@ -9,6 +9,8 @@
 #include <algorithm>
 #include <iterator>
 
+const std::string ENV_FOLDER = "sample-map-usage-dir";
+
 namespace fs = std::experimental::filesystem;
 
 void* save_str(const std::string& str, void* dest)
@@ -69,7 +71,7 @@ int main()
     dbstl::dbstl_startup();
 
     // open an environment and the database
-    auto penv = dbstl::open_env(ENV_FOLDER, 0u, DB_INIT_MPOOL | DB_CREATE);
+    auto penv = dbstl::open_env(ENV_FOLDER.c_str(), 0u, DB_INIT_MPOOL | DB_CREATE);
     auto db = dbstl::open_db(penv, "sample-map-usage.db", DB_BTREE, DB_CREATE, 0u);
 
     //cleare current database data

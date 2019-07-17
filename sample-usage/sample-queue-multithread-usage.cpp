@@ -11,6 +11,8 @@
 
 #include <thread>
 
+const std::string ENV_FOLDER="sample-queue-multithread-usage-dir";
+
 namespace fs = std::experimental::filesystem;
 
 void* save_str(const std::string& str, void* dest)
@@ -137,7 +139,7 @@ int main()
     dbstl::dbstl_startup();
 
 
-    auto penv = dbstl::open_env(ENV_FOLDER, 0u, DB_INIT_MPOOL | DB_CREATE | DB_INIT_LOCK | DB_THREAD);
+    auto penv = dbstl::open_env(ENV_FOLDER.c_str(), 0u, DB_INIT_MPOOL | DB_CREATE | DB_INIT_LOCK | DB_THREAD);
 
     // open an environment and the database
     auto db = new Db(nullptr, DB_CXX_NO_EXCEPTIONS);

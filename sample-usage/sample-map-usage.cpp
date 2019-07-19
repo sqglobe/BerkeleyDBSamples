@@ -79,10 +79,9 @@ int main()
 
 
     // register callbacks for marshalling/unmarshalling stored element
-    auto inst = dbstl::DbstlElemTraits<TestElement>::instance();
-    inst->set_size_function(&TestMarshaller::size);
-    inst->set_copy_function(&TestMarshaller::store);
-    inst->set_restore_function(&TestMarshaller::restore);
+    dbstl::DbstlElemTraits<TestElement>::instance()->set_size_function(&TestMarshaller::size);
+    dbstl::DbstlElemTraits<TestElement>::instance()->set_copy_function(&TestMarshaller::store);
+    dbstl::DbstlElemTraits<TestElement>::instance()->set_restore_function(&TestMarshaller::restore);
 
 
     // create a persistant storage
@@ -119,10 +118,14 @@ int main()
 
     // update a value in the storage with iterator's _DB_STL_StoreElement function
     if(auto findIter = elementsMap.find("test key 1"); findIter != elementsMap.end()){
-        auto &ref = *findIter;
-        ref.second.id = "new test id 1";
-        ref.second.name = "new test name 1";
-        ref.second._DB_STL_StoreElement();
+        findIter->second.id = "skipped id";
+        findIter->second.name = "skipped name";
+        std::cout << "Found elem for key  " << "test key 1" << ": id: " << findIter->second.id << ", name: " << findIter->second.name  << std::endl;
+
+        auto ref = findIter->second;
+        ref.id = "new test id 1";
+        ref.name = "new test name 1";
+        ref._DB_STL_StoreElement();
     }else{
         std::cerr << "Key " << "test key 1" << " not found " << std::endl;
     }

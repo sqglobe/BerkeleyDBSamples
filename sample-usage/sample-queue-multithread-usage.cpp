@@ -81,19 +81,25 @@ void vector_modifications(dbstl::db_vector<TestElement> &container){
 
         // copy the values into storage
 
-        std::copy(std::cbegin(inputValues), std::cend(inputValues),  std::back_inserter(container));
+        std::copy(
+                    std::cbegin(inputValues),
+                    std::cend(inputValues),
+                    std::back_inserter(container));
     }
 
     std::cout << "Filled persistant storage" << std::endl;
     std::copy(container.begin(dbstl::ReadModifyWriteOption::no_read_modify_write(), true),
-                   container.end(),
-                   std::ostream_iterator<TestElement>(std::cout, "\n"));
+              container.end(),
+              std::ostream_iterator<TestElement>(std::cout, "\n"));
 
     {
         // use basic STL algorithm to find an element
-        auto iter = std::find_if(container.begin(), container.end(), [](const auto &val){
-           return val.id == "test id 2" ;
-        });
+        auto iter = std::find_if(
+                    container.begin(),
+                    container.end(),
+                    [](const auto &val){
+                      return val.id == "test id 2" ;
+             });
 
         if(iter != container.end()){
             auto &ref = *iter;

@@ -81,7 +81,9 @@ int main()
     // register callbacks for marshalling/unmarshalling stored element
     dbstl::DbstlElemTraits<TestElement>::instance()->set_size_function(&TestMarshaller::size);
     dbstl::DbstlElemTraits<TestElement>::instance()->set_copy_function(&TestMarshaller::store);
-    dbstl::DbstlElemTraits<TestElement>::instance()->set_restore_function(&TestMarshaller::restore);
+    dbstl::DbstlElemTraits<TestElement>::instance()->set_restore_function(
+         &TestMarshaller::restore
+    );
 
 
     // create a persistant storage
@@ -98,19 +100,29 @@ int main()
 
         // copy the values into storage
 
-        std::copy(std::cbegin(inputValues), std::cend(inputValues), std::inserter(elementsMap, elementsMap.begin()));
+        std::copy(
+          std::cbegin(inputValues),
+          std::cend(inputValues),
+          std::inserter(elementsMap, elementsMap.begin())
+        );
     }
 
     std::cout << "Filled persistant storage" << std::endl;
-    std::transform(elementsMap.begin(dbstl::ReadModifyWriteOption::no_read_modify_write(), true), elementsMap.end(), std::ostream_iterator<std::string>(std::cout, "\n"), [](const auto data) -> std::string {
-       return  data.first + "=> { id: " + data.second.id + ", name: " + data.second.name + "}";
+    std::transform(
+      elementsMap.begin(dbstl::ReadModifyWriteOption::no_read_modify_write(), true),
+      elementsMap.end(),
+      std::ostream_iterator<std::string>(std::cout, "\n"),
+      [](const auto data) -> std::string {
+           return  data.first +
+                       "=> { id: " + data.second.id + ", name: " + data.second.name + "}";
     });
-
 
     elementsMap["added key 1"] = {"added id 1", "added name 1"};
 
     {
-        auto [iter, res] = elementsMap.insert(std::make_pair(std::string("added key 2"), TestElement{"added id 2", "added name 2"}));
+        auto [iter, res] = elementsMap.insert(
+            std::make_pair(std::string("added key 2"), TestElement{"added id 2", "added name 2"})
+        );
         if(!res){
             std::cerr << "Failed to insert value " << std::endl;
         }
@@ -120,8 +132,9 @@ int main()
     if(auto findIter = elementsMap.find("test key 1"); findIter != elementsMap.end()){
         findIter->second.id = "skipped id";
         findIter->second.name = "skipped name";
-        std::cout << "Found elem for key  " << "test key 1" << ": id: " << findIter->second.id << ", name: " << findIter->second.name  << std::endl;
-
+        std::cout << "Found elem for key  " << "test key 1" <<
+           ": id: " << findIter->second.id << ", name: " << findIter->second.name
+           << std::endl;
         auto ref = findIter->second;
         ref.id = "new test id 1";
         ref.name = "new test name 1";
@@ -138,8 +151,13 @@ int main()
     }
 
     std::cout << "Changed persistant storage" << std::endl;
-    std::transform(elementsMap.begin(dbstl::ReadModifyWriteOption::no_read_modify_write(), true), elementsMap.end(), std::ostream_iterator<std::string>(std::cout, "\n"), [](const auto data) -> std::string {
-       return  data.first + "=> { id: " + data.second.id + ", name: " + data.second.name + "}";
+    std::transform(
+      elementsMap.begin(dbstl::ReadModifyWriteOption::no_read_modify_write(), true),
+      elementsMap.end(),
+      std::ostream_iterator<std::string>(std::cout, "\n"),
+      [](const auto data) -> std::string {
+           return  data.first +
+                       "=> { id: " + data.second.id + ", name: " + data.second.name + "}";
     });
 
     dbstl::dbstl_exit();
